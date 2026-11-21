@@ -13,7 +13,7 @@ def test_registration_success(driver):
     registration_page.open_registration_page()
     registration_page.fill_email_field(user.username)
     registration_page.fill_password_field(user.password)
-    registration_page.click_on_registration_button()
+    registration_page.click_registration_button()
 
     assert registration_page.is_sign_out_displayed() is True
 
@@ -63,3 +63,4 @@ def test_registration_with_wrong_already_existed(driver):
 
     assert registration_page.get_alert_text() == "User already exist"
     registration_page.accept_alert()
+

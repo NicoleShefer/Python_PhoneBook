@@ -1,8 +1,8 @@
 from faker import Faker
 
-from models.contact import Contact
-from pages.add_contact_page import ContactPage
-from pages.contacts_page import ContactsPage
+from Models.Contact import Contact
+from Pages.add_contact_page import ContactPage
+from Pages.contacts_page import ContactsPage
 
 fake = Faker()
 def create_contact():
@@ -16,9 +16,9 @@ def create_contact():
 
 
 
-def test_edit_contact_name_field(authentification):
-    contact_page = ContactPage(authentification)
-    contacts_page = ContactsPage(authentification)
+def test_edit_contact_name_field(authenticated_client):
+    contact_page = ContactPage(authenticated_client)
+    contacts_page = ContactsPage(authenticated_client)
 
     contact = create_contact()
 
@@ -33,9 +33,9 @@ def test_edit_contact_name_field(authentification):
 
     assert contacts_page.contact_name_updated() == new_name
 
-def test_edit_contact_last_name_field(authentification):
-    contact_page = ContactPage(authentification)
-    contacts_page = ContactsPage(authentification)
+def test_edit_contact_last_name_field(authenticated_client):
+    contact_page = ContactPage(authenticated_client)
+    contacts_page = ContactsPage(authenticated_client)
 
     contact = create_contact()
 
@@ -50,9 +50,9 @@ def test_edit_contact_last_name_field(authentification):
 
     assert contacts_page.contact_last_name_updated() == new_name
 
-def test_edit_contact_phone_field(authentification):
-    contact_page = ContactPage(authentification)
-    contacts_page = ContactsPage(authentification)
+def test_edit_contact_phone_field(authenticated_client):
+    contact_page = ContactPage(authenticated_client)
+    contacts_page = ContactsPage(authenticated_client)
 
     contact = create_contact()
 
@@ -67,9 +67,9 @@ def test_edit_contact_phone_field(authentification):
 
     assert contacts_page.contact_cards_visible(new_phone)
 
-def test_edit_contact_email_field(authentification):
-    contact_page = ContactPage(authentification)
-    contacts_page = ContactsPage(authentification)
+def test_edit_contact_email_field(authenticated_client):
+    contact_page = ContactPage(authenticated_client)
+    contacts_page = ContactsPage(authenticated_client)
 
     contact = create_contact()
 
