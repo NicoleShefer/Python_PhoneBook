@@ -1,66 +1,66 @@
-from os import name
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
+from Pages.base_page import BasePage
 
-class ContactPage:
-    NAME_INPUT = (By.CSS_SELECTOR, "input[placeholder='Name']")
-    LAST_NAME_INPUT = (By.CSS_SELECTOR, "input[placeholder='LastName']")
+
+class ContactPage(BasePage):
+    ADD_CONTACT_BUTTON = (By.CSS_SELECTOR, "[href='/add']")
+    FIRST_NAME_INPUT = (By.CSS_SELECTOR, "input[placeholder='Name']")
+    LAST_NAME_INPUT = (By.CSS_SELECTOR, "input[placeholder='Last Name']")
     PHONE_INPUT = (By.CSS_SELECTOR, "input[placeholder='Phone']")
-    DESCRIPTION_INPUT = (By.CSS_SELECTOR, "input[placeholder='Description']")
+    EMAIL_INPUT = (By.CSS_SELECTOR, "input[placeholder='email']")
     ADDRESS_INPUT = (By.CSS_SELECTOR, "input[placeholder='Address']")
-    SAVE_BUTTON = (By.XPATH, "//button[contains(., 'Save')]")
-    ADD_CONTACT_BUTTON = (By.CSS_SELECTOR, "[HREF='/add']")
-
-    def __init__(self, driver):
-        self.driver = driver
+    DESCRIPTION_INPUT = (By.CSS_SELECTOR, "input[placeholder='description']")
+    SAVE_BUTTON = (By.XPATH, "//button[contains(.,'Save')]")
 
     def open_contact_form(self):
-        self.driver.find_element(*self.ADD_CONTACT_BUTTON).click()
+        self.click(self.ADD_CONTACT_BUTTON)
 
-    def fill_name_field(self):
-        self.driver.find_element_by_css_selector(*self.NAME_INPUT).clear()
-        self.driver.find_element_by_css_selector(*self.NAME_INPUT).send_keys(name)
+    def fill_first_name_field(self, first_name):
+        self.fill(self.FIRST_NAME_INPUT, first_name)
 
-    def fill_last_name(self, last_name):
-        self.driver.find_element_by_css_selector(*self.LAST_NAME_INPUT).clear()
-        self.driver.find_element_by_css_selector(*self.LAST_NAME_INPUT).send_keys(last_name)
+    def fill_last_name_field(self, last_name):
+        self.fill(self.LAST_NAME_INPUT, last_name)
 
-    def fill_phone(self, phone):
-        self.driver.find_element_by_css_selector(*self.PHONE_INPUT).clear()
-        self.driver.find_element_by_css_selector(*self.PHONE_INPUT).send_keys(phone)
+    def fill_phone_field(self, phone):
+        self.fill(self.PHONE_INPUT, phone)
 
-    def fill_address(self, address):
-        self.driver.find_element_by_css_selector(*self.ADDRESS_INPUT).clear()
-        self.driver.find_element_by_css_selector(*self.NAME_INPUT).send_keys(address)
+    def fill_email_field(self, email):
+        self.fill(self.EMAIL_INPUT, email)
 
-    def fill_description(self, description):
-        self.driver.find_element_by_css_selector(*self.DESCRIPTION_INPUT).clear()
-        self.driver.find_element_by_css_selector(*self.DESCRIPTION_INPUT).send_keys(description)
+    def fill_address_field(self, address):
+        self.fill(self.ADDRESS_INPUT, address)
 
-    def fill_contact(self, contact):
-        self.driver.find_element_by_css_selector(*self.ADD_CONTACT_BUTTON).clear()
-        self.driver.find_element_by_css_selector(*self.ADD_CONTACT_BUTTON).send_keys(contact)
+    def fill_description_field(self, description):
+        self.fill(self.DESCRIPTION_INPUT, description)
+
+    def fill_contact_form(self,contact):
+        self.fill_first_name_field(contact.first_name)
+        self.fill_last_name_field(contact.last_name)
+        self.fill_phone_field(contact.phone)
+        self.fill_email_field(contact.email)
+        self.fill_address_field(contact.address)
+        self.fill_description_field(contact.description)
 
     def submit_contact(self):
-        self.driver.find_element(*self.SAVE_BUTTON).click()
+        self.click(self.SAVE_BUTTON)
 
     def contact_card_visible(self, phone):
-        locator = (By.XPATH, f"//h3[contains(text(),'{phone}')]")
-        element = WebDriverWait(self.driver, 5).until(
-            expected_conditions.presence_of_element_located(locator))
+        locator = (By.XPATH, f"//h3[contains(text(), '{phone}')]")
+        element = WebDriverWait(self.driver, 10).until(
+            expected_conditions.presence_of_element_located(locator)
+        )
         return element.is_displayed()
 
-    def open_contact_details_card(self, phone, contact_page):
-        card = self.driver.find_element(By.XPATH, f"//h3[contains(text(),'{phone}')]/..").click()
+    def open_contact_details_card(self, phone):
+        card = self.driver.find_element(By.XPATH, f"//h3[contains(text(), '{phone}')]/..").click()
 
-
-
-
-
-
+    def create_contact_steps(self, contact):
+        self.open_contact_form()
+        self.fill_contact_form(contact)
+        self.submit_contact()
 
 
 

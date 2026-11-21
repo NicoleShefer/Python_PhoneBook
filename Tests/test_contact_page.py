@@ -2,7 +2,7 @@ import random
 
 from faker import Faker
 
-from Models.Contact import Contact
+from models.contact import Contact
 from pages.add_contact_page import ContactPage
 
 fake = Faker()
@@ -30,6 +30,7 @@ def test_add_contact_all_req_fields_success(authentification):
         fake.numerify("05#########"),
         fake.email(),
         fake.street_address(),
+        ""
     )
     contact_page.open_contact_form()
     contact_page.fill_contact_form(contact)

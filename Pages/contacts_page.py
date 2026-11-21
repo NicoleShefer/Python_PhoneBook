@@ -1,9 +1,11 @@
 import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 from Pages.base_page import BasePage
+
 
 class ContactsPage(BasePage):
     CONTACTS_LINK = (By.CSS_SELECTOR, "[href='/contacts']")
@@ -16,6 +18,8 @@ class ContactsPage(BasePage):
     EMAIL_INPUT = (By.CSS_SELECTOR, "input[placeholder='email']")
     ADDRESS_INPUT = (By.CSS_SELECTOR, "input[placeholder='Address']")
     DESCRIPTION_INPUT = (By.CSS_SELECTOR, "input[placeholder='desc']")
+    DETAILS_CARD = (By.CLASS_NAME, 'contact-item-detailed_card__50dTS')
+    REMOVE_BUTTON = (By.XPATH, "//button[.='Remove']")
 
     def open_contact_list(self):
         self.click(self.CONTACTS_LINK)
@@ -24,6 +28,9 @@ class ContactsPage(BasePage):
 
     def get_contact_card(self, phone):
         return self.find(f"//h3[text()='{phone}']")
+
+    def get_contact_cards_number(self):
+        return len(self.driver.find_elements(*self.CONTACTS_CARDS))
 
     def contact_cards_visible(self, phone):
         locator = self.get_card_locator(phone)
@@ -46,3 +53,28 @@ class ContactsPage(BasePage):
     def submit_edit(self):
         self.click(self.SAVE_BUTTON)
         time.sleep(1)
+
+    def contact_name_updated(self):
+        card = self.find((By.CSS_SELECTOR,".contact-item-detailed_card__50dTS h2"))
+        return card.text.split()[0]
+
+    def contact_last_name_updated(self):
+        card = self.find((By.CSS_SELECTOR, ".contact-item-detailed_card__50dTS h2"))
+        return card.text.split()[1]
+
+    def contact_email_updated(self):
+        card = self.find(self.DETAILS_CARD)
+        return card.text.split()[3]
+
+    def remove_current_contact(self):
+        self.click(self.REMOVE_BUTTON)
+        time.sleep(1)
+
+    def open_first_contact(self):
+        cards = self.driver.find_elements(*self.CONTACTS_CARDS)
+        cards[0].click()
+
+    def remove_all_contacts(self):
+        while self.get_contact_cards_number() > 0:
+            self.open_first_contact()
+            self.remove_current_contact()
